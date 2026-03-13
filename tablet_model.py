@@ -12,7 +12,7 @@ warnings.filterwarnings('ignore')
 
 
 
-def load_and_preprocess_data(filepath='final_project/full_price_prediction/tablets_cleaned_continuous.csv'):
+def load_and_preprocess_data(filepath='tablets_cleaned_continuous.csv'):
     df = pd.read_csv(filepath)
 
     df['price'] = df['price'].astype(str)
@@ -120,7 +120,7 @@ def train_linear_regression(pdf,test_size=0.2):
     return results
     
     
-def forecast_product(pdf, days_ahead=7):
+def forecast_tablet(pdf, days_ahead=7):
 
     pdf = engineer_features(pdf)
     feature_cols = [
@@ -264,5 +264,6 @@ if __name__ == "__main__":
     print(f"MAE:  {summary['avg_test_mae']:,.2f} ± {summary['std_test_mae']:,.2f}")
     print(f"R²:   {summary['avg_test_r2']:.4f} ± {summary['std_test_r2']:.4f}")
     print(f"RMSE: {summary['avg_test_rmse']:,.2f}")
+
 
     print("\n✅ Evaluation Complete")        
