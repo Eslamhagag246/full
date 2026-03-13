@@ -119,7 +119,7 @@ except Exception as e:
 @st.cache_data(ttl=86400)
 def load_tablet_data():
     if MODELS_AVAILABLE:
-        return load_tablets('tablet_cleaned_continuous.csv')
+        return load_tablets('tablets_cleaned_continuous.csv')
     return None
 
 @st.cache_data(ttl=86400)
@@ -560,6 +560,7 @@ st.dataframe(forecast_df, use_container_width=True, hide_index=True)
 url = pdf['URL'].iloc[-1]
 if url and str(url) != 'nan':
     st.markdown(f'[🔗 View on {pdf["website"].iloc[0].upper()}]({url})')
+
 
 
 
