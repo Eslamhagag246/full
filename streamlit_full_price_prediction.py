@@ -92,8 +92,12 @@ section[data-testid="stSidebar"] > div {
 # ═══════════════════════════════════════════════════════════
 # IMPORT MODEL FUNCTIONS
 # ═══════════════════════════════════════════════════════════
-from tablet_model import load_and_preprocess_data as load_tablets, forecast_product as forecast_tablet
-from mobile_model import load_and_preprocess_data as load_mobiles, forecast_product as forecast_mobile
+try:
+    from tablet_model import load_and_preprocess_data as load_tablets, forecast_product as forecast_tablet
+    from mobile_model import load_and_preprocess_data as load_mobiles, forecast_product as forecast_mobile
+    MODELS_AVAILABLE = True
+except:
+    MODELS_AVAILABLE = False
 # ═══════════════════════════════════════════════════════════
 # DATA LOADING (CACHED)
 # ═══════════════════════════════════════════════════════════
@@ -242,7 +246,7 @@ with st.sidebar:
         df = load_mobile_data()
         forecast_func = forecast_mobile
         device_key = "mobile"
-        data_file = "mobile_phones_cleaned.csv"
+        data_file = "mobile_cleaned_70K.csv"
     
     if df is not None:
         last_update = pd.to_datetime(df['date'].max()).strftime('%B %d, %Y')
