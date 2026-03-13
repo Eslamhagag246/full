@@ -12,7 +12,7 @@ warnings.filterwarnings('ignore')
 
 
 
-def load_and_preprocess_data(filepath='tablets_cleaned_continuous.csv'):
+def load_tablets(filepath='tablets_cleaned_continuous.csv'):
     df = pd.read_csv(filepath)
 
     df['price'] = df['price'].astype(str)
@@ -267,4 +267,5 @@ if __name__ == "__main__":
 
 
     print("\n✅ Evaluation Complete")        
+
 
