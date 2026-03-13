@@ -167,8 +167,8 @@ def forecast_product(pdf, days_ahead=7):
             price_lag_1,
             price_lag_3,
             price_lag_7,
-            pct_change_1,
-            pct_change_3,
+            #pct_change_1,
+            #pct_change_3,
             pdf['ram_normalized'].iloc[-1],
             pdf['storage_normalized'].iloc[-1],
             pdf['specs_score'].iloc[-1]
@@ -181,10 +181,33 @@ def forecast_product(pdf, days_ahead=7):
 
     forecast_dates = [last_date + timedelta(days=i+1) for i in range(days_ahead)]
 
+    y_pred = model.predict(X)
+    mae = mean_absolute_error(y, y_pred)
+    r2 = r2_score(y, y_pred)
+    
+    # Confidence level
+    n = len(pdf)
+    if n >= 30:
+        confidence = "High"
+    elif n >= 15:
+        confidence = "Medium"
+    else:
+        confidence = "Low"
+ 
+    # ✅ Return ALL required fields
     return {
-        "forecast_dates": forecast_dates,
-        "forecast_prices": forecasts,
-        "model_type": "Multiple Linear Regression"
+        'pdf': pdf,
+        'forecast_dates': forecast_dates,
+        'forecast_prices': np.array(forecasts),
+        'mae': mae,
+        'r2': r2,
+        'last_price': float(pdf['price'].iloc[-1]),
+        'avg_price': float(pdf['price'].mean()),
+        'min_price': float(pdf['price'].min()),
+        'max_price': float(pdf['price'].max()),
+        'n_obs': n,
+        'confidence': confidence,
+        'model_type': 'Multiple Linear Regression'
     }
 
 def evaluate_model_on_all_products(filepath, min_obs=10):
