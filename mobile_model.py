@@ -119,7 +119,7 @@ def train_linear_regression(pdf,test_size=0.2):
 
     return results
     
-def forecast_mobile(pdf, days_ahead=7):
+def forecast_product(pdf, days_ahead=7):
 
     pdf = engineer_features(pdf)
     feature_cols = [
@@ -265,3 +265,4 @@ if __name__ == "__main__":
 
 
     print("\n✅ Evaluation Complete")        
+
