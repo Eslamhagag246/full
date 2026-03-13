@@ -241,7 +241,7 @@ if __name__ == "__main__":
     print("🚀 MULTIPLE LINEAR REGRESSION MODEL EVALUATION")
     print("="*80)
 
-    filepath=r'C:\projects\final_project\full_price_prediction\tablets_cleaned_continuous.csv'
+    filepath='tablets_cleaned_continuous.csv'
 
     print("\n📊 Evaluating model on all products...")
 
@@ -265,6 +265,7 @@ if __name__ == "__main__":
 
 
     print("\n✅ Evaluation Complete")        
+
 
 
 
