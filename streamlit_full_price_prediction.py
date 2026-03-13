@@ -92,27 +92,8 @@ section[data-testid="stSidebar"] > div {
 # ═══════════════════════════════════════════════════════════
 # IMPORT MODEL FUNCTIONS
 # ═══════════════════════════════════════════════════════════
-forecast_tablet = None
-forecast_mobile = None
-load_tablets = None
-load_mobiles = None
-
-try:
-    from tablet_model import (
-        load_and_preprocess_data as load_tablets,
-        forecast_product as forecast_tablet
-    )
-
-    from mobile_model import (
-        load_and_preprocess_data as load_mobiles,
-        forecast_product as forecast_mobile
-    )
-
-    MODELS_AVAILABLE = True
-
-except Exception as e:
-    print("Model import error:", e)
-    MODELS_AVAILABLE = False
+from tablet_model import load_and_preprocess_data as load_tablets, forecast_product as forecast_tablet
+from mobile_model import load_and_preprocess_data as load_mobiles, forecast_product as forecast_mobile
 # ═══════════════════════════════════════════════════════════
 # DATA LOADING (CACHED)
 # ═══════════════════════════════════════════════════════════
@@ -560,6 +541,7 @@ st.dataframe(forecast_df, use_container_width=True, hide_index=True)
 url = pdf['URL'].iloc[-1]
 if url and str(url) != 'nan':
     st.markdown(f'[🔗 View on {pdf["website"].iloc[0].upper()}]({url})')
+
 
 
 
