@@ -167,8 +167,8 @@ def forecast_product(pdf, days_ahead=7):
             price_lag_1,
             price_lag_3,
             price_lag_7,
-            #pct_change_1,
-            #pct_change_3,
+            pct_change_1,
+            pct_change_3,
             pdf['ram_normalized'].iloc[-1],
             pdf['storage_normalized'].iloc[-1],
             pdf['specs_score'].iloc[-1]
@@ -194,7 +194,6 @@ def forecast_product(pdf, days_ahead=7):
     else:
         confidence = "Low"
  
-    # ✅ Return ALL required fields
     return {
         'pdf': pdf,
         'forecast_dates': forecast_dates,
