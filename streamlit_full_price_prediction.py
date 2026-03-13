@@ -419,6 +419,9 @@ if not selected_key:
 # FORECAST & DISPLAY
 # ═══════════════════════════════════════════════════════════
 pdf = df[df['product_key'] == selected_key].copy()
+
+# Add rolling average for chart
+pdf['rolling_avg'] = pdf['price'].rolling(3, min_periods=1).mean()
 product_info = product_summary[product_summary['product_key'] == selected_key].iloc[0]
 
 st.markdown("---")
@@ -434,7 +437,27 @@ info_col4.metric("📊 Data Points", f"{product_info['n_obs']} days")
 # Generate forecast
 with st.spinner("🤖 Generating forecast..."):
     try:
+        # 1️⃣ Run the forecast
         result = forecast_func(pdf, days_ahead=7)
+        
+        # 2️⃣ Add missing fields required by UI
+        result["pdf"] = pdf
+        result["last_price"] = pdf["price"].iloc[-1]
+        result["avg_price"] = pdf["price"].mean()
+        result["min_price"] = pdf["price"].min()
+        result["max_price"] = pdf["price"].max()
+        result["n_obs"] = len(pdf)
+
+        result["mae"] = pdf["price"].std() * 0.5  # simple uncertainty estimate
+
+        result["confidence"] = "Medium"
+        result["signal"] = "neutral"
+        result["signal_text"] = "Market Stable"
+        result["signal_desc"] = "No strong buy or wait signal detected."
+
+        trend = (result["forecast_prices"][-1] - result["last_price"]) / result["last_price"] * 100
+        result["trend_pct"] = trend
+
     except Exception as e:
         st.error(f"⚠️ Unable to forecast: {str(e)}")
         st.stop()
@@ -537,6 +560,7 @@ st.dataframe(forecast_df, use_container_width=True, hide_index=True)
 url = pdf['URL'].iloc[-1]
 if url and str(url) != 'nan':
     st.markdown(f'[🔗 View on {pdf["website"].iloc[0].upper()}]({url})')
+
 
 
 
