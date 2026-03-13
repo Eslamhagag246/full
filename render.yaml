@@ -1,0 +1,19 @@
+services:
+  - type: cron
+    name: price-scraper-daily
+    env: python
+    schedule: "0 22 * * *"
+
+    buildCommand: |
+      pip install -r requirements.txt
+      python -m playwright install chromium
+      python -m playwright install-deps
+    
+    startCommand: python render_automation.py
+    
+    envVars:
+      - key: GITHUB_TOKEN
+        sync: false 
+      - key: GITHUB_REPO
+        value: Eslamhagag246/full_price_prediction
+        
