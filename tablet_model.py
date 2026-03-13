@@ -93,7 +93,7 @@ def train_linear_regression(pdf,test_size=0.2):
     model = LinearRegression()
     model.fit(X_train, y_train)
 
-    joblib.dump(model,"Linear_Regression_tablets.pkl")
+    #joblib.dump(model,"Linear_Regression_tablets.pkl")
     
     y_train_pred = model.predict(X_train)
     y_test_pred = model.predict(X_test)
