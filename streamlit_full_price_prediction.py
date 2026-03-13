@@ -92,36 +92,19 @@ section[data-testid="stSidebar"] > div {
 # ═══════════════════════════════════════════════════════════
 # IMPORT MODEL FUNCTIONS
 # ═══════════════════════════════════════════════════════════
-# Initialize variables first
-load_tablets = None
-forecast_tablet = None
-MODELS_AVAILABLE = False
-
-# Try importing
 try:
-    from tablet_model_with_evaluation import (
+    from tablet_model import (
         load_and_preprocess_data as load_tablets,
         forecast_product as forecast_tablet
     )
+    from mobile_model import (
+        load_and_preprocess_data as load_mobiles,
+        forecast_product as forecast_mobile
+    )
     MODELS_AVAILABLE = True
-except ImportError as e:
-    st.warning(f"⚠️ Tablet model not found: {str(e)}")
-
-# Fallback to tablet_model.py
-if not MODELS_AVAILABLE:
-    try:
-        from tablet_model import (
-            load_and_preprocess_data as load_tablets,
-            forecast_product as forecast_tablet
-        )
-        MODELS_AVAILABLE = True
-    except ImportError:
-        pass
-
-# Stop if no model found
-if not MODELS_AVAILABLE:
-    st.error("❌ Model files not found")
-    st.stop()
+except ImportError:
+    MODELS_AVAILABLE = False
+    st.error("⚠️ Model files not found. Please ensure tablet_model.py and mobile_model.py are in the same directory.")
 
 # ═══════════════════════════════════════════════════════════
 # DATA LOADING (CACHED)
@@ -547,4 +530,5 @@ st.dataframe(forecast_df, use_container_width=True, hide_index=True)
 url = pdf['URL'].iloc[-1]
 if url and str(url) != 'nan':
     st.markdown(f'[🔗 View on {pdf["website"].iloc[0].upper()}]({url})')
+
 
