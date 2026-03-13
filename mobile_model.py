@@ -167,8 +167,8 @@ def forecast_product(pdf, days_ahead=7):
             price_lag_1,
             price_lag_3,
             price_lag_7,
-            pct_change_1,
-            pct_change_3,
+            0 ,#pct_change_1,
+            0 ,#pct_change_3,
             pdf['ram_normalized'].iloc[-1],
             pdf['storage_normalized'].iloc[-1],
             pdf['specs_score'].iloc[-1]
