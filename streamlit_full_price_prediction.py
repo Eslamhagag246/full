@@ -88,30 +88,65 @@ section[data-testid="stSidebar"] > div {
 </style>
 """, unsafe_allow_html=True)
 
-
 # ═══════════════════════════════════════════════════════════
 # IMPORT MODEL FUNCTIONS
 # ═══════════════════════════════════════════════════════════
+import os
+from pathlib import Path
+
 try:
     from tablet_model import load_and_preprocess_data as load_tablets, forecast_product as forecast_tablet
     from mobile_model import load_and_preprocess_data as load_mobiles, forecast_product as forecast_mobile
     MODELS_AVAILABLE = True
-except:
+except Exception as e:
     MODELS_AVAILABLE = False
+    print("Model import error:", e)
+
+# ═══════════════════════════════════════════════════════════
+# DATA FILE PATHS (ABSOLUTE PATH FIX)
+# ═══════════════════════════════════════════════════════════
+
+BASE_DIR = Path(__file__).parent
+
+TABLET_DATA_PATH = BASE_DIR / "tablets_cleaned_continuous.csv"
+MOBILE_DATA_PATH = BASE_DIR / "mobile_cleaned_70K.csv"
+
 # ═══════════════════════════════════════════════════════════
 # DATA LOADING (CACHED)
 # ═══════════════════════════════════════════════════════════
+
 @st.cache_data(ttl=86400)
 def load_tablet_data():
-    if MODELS_AVAILABLE:
-        return load_tablets('tablets_cleaned_continuous.csv')
-    return None
+
+    if not MODELS_AVAILABLE:
+        return None
+
+    try:
+        if TABLET_DATA_PATH.exists():
+            return load_tablets(str(TABLET_DATA_PATH))
+        else:
+            st.error(f"❌ File not found: {TABLET_DATA_PATH}")
+            return None
+    except Exception as e:
+        st.error(f"Tablet data loading error: {e}")
+        return None
+
 
 @st.cache_data(ttl=86400)
 def load_mobile_data():
-    if MODELS_AVAILABLE:
-        return load_mobiles('mobile_cleaned_70K.csv')
-    return None
+
+    if not MODELS_AVAILABLE:
+        return None
+
+    try:
+        if MOBILE_DATA_PATH.exists():
+            return load_mobiles(str(MOBILE_DATA_PATH))
+        else:
+            st.error(f"❌ File not found: {MOBILE_DATA_PATH}")
+            return None
+    except Exception as e:
+        st.error(f"Mobile data loading error: {e}")
+        return None
 # ═══════════════════════════════════════════════════════════
 # CHART FUNCTION
 # ═══════════════════════════════════════════════════════════
